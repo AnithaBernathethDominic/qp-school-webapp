@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: qp-school-webapp
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
