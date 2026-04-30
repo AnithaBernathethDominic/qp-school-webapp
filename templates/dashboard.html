@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Upload Question Paper + Syllabus</h1>
+    <p>Drag and drop PDFs. The system will parse questions, map them to syllabus topics, and generate Word/Excel reports.</p>
+  </div>
+</section>
+
+<form method="post" action="{{ url_for('analyze') }}" enctype="multipart/form-data" class="upload-grid">
+  <label class="dropzone">
+    <span class="icon">📄</span>
+    <strong>Question Paper PDF</strong>
+    <small>Drop or click to upload</small>
+    <input type="file" name="question_paper" accept="application/pdf" required>
+  </label>
+  <label class="dropzone">
+    <span class="icon">📚</span>
+    <strong>Syllabus PDF</strong>
+    <small>Drop or click to upload</small>
+    <input type="file" name="syllabus" accept="application/pdf" required>
+  </label>
+  <button class="wide-btn" type="submit">Analyze Paper</button>
+</form>
+
+<section class="panel">
+  <h2>Recent Analyses</h2>
+  <table>
+    <thead><tr><th>Date</th><th>Question Paper</th><th>Syllabus</th><th>Questions</th><th>Open</th></tr></thead>
+    <tbody>
+      {% for a in analyses %}
+        <tr>
+          <td>{{ a.created_at }}</td><td>{{ a.qp_filename }}</td><td>{{ a.syllabus_filename }}</td><td>{{ a.total_questions }}</td>
+          <td><a class="link-btn" href="{{ url_for('result', analysis_id=a.id) }}">View</a></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5">No reports yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

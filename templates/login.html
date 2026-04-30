@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="login-card">
+  <h1>Teacher Login</h1>
+  <p>Login to upload question papers and generate topic weightage reports.</p>
+  <form method="post" class="form">
+    <label>Username</label>
+    <input name="username" value="admin" required>
+    <label>Password</label>
+    <input name="password" type="password" value="admin123" required>
+    <button type="submit">Login</button>
+  </form>
+</section>
+{% endblock %}

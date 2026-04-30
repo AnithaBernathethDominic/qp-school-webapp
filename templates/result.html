@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero result-hero">
+  <div>
+    <h1>Analysis Report</h1>
+    <p>{{ analysis.qp_filename }} · {{ analysis.total_questions }} questions</p>
+  </div>
+  <div class="actions">
+    <a class="download" href="{{ url_for('download', filename=analysis.docx_file) }}">Download Word</a>
+    <a class="download" href="{{ url_for('download', filename=analysis.xlsx_file) }}">Download Excel</a>
+  </div>
+</section>
+
+<section class="grid-2">
+  <div class="panel"><h2>Chapter Weightage Chart</h2><canvas id="chapterChart"></canvas></div>
+  <div class="panel"><h2>Chapter-wise Weightage</h2><table><thead><tr><th>Chapter</th><th>Questions</th><th>Marks</th><th>%</th></tr></thead><tbody>{% for r in chapters %}<tr><td>{{ r.chapter }}</td><td>{{ r.questions }}</td><td>{{ r.marks }}</td><td>{{ r['weightage_%'] }}</td></tr>{% endfor %}</tbody></table></div>
+</section>
+
+<section class="panel"><h2>Subtopic-wise Weightage</h2><table><thead><tr><th>Chapter</th><th>Code</th><th>Subtopic</th><th>Questions</th><th>%</th></tr></thead><tbody>{% for r in subtopics %}<tr><td>{{ r.chapter }}</td><td>{{ r.subtopic_code }}</td><td>{{ r.subtopic }}</td><td>{{ r.questions }}</td><td>{{ r['weightage_%'] }}</td></tr>{% endfor %}</tbody></table></section>
+
+<section class="panel"><h2>Question-wise Topic Mapping</h2><table><thead><tr><th>Q.No</th><th>Question</th><th>Chapter</th><th>Subtopic</th><th>Confidence</th></tr></thead><tbody>{% for r in mapping %}<tr><td>{{ r.question_no }}</td><td>{{ r.question }}</td><td>{{ r.chapter }}</td><td>{{ r.subtopic_code }} {{ r.subtopic }}</td><td><span class="pill">{{ r.confidence }}</span></td></tr>{% endfor %}</tbody></table></section>
+
+<script>
+const labels = {{ chart_labels|tojson }};
+const values = {{ chart_values|tojson }};
+new Chart(document.getElementById('chapterChart'), {type: 'bar', data: {labels, datasets: [{label: 'Marks', data: values}]}, options: {responsive: true, plugins: {legend: {display: false}}, scales: {x: {ticks: {display: false}}, y: {beginAtZero: true}}}});
+</script>
+{% endblock %}
